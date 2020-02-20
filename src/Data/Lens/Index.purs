@@ -15,7 +15,7 @@ import Data.Map as M
 import Data.Maybe (Maybe, maybe, fromMaybe)
 import Data.Set as S
 import Data.Traversable (traverse)
-import Foreign.Object as FO
+import Erl.Data.Map as EMap
 
 -- | `Index` is a type class whose instances are optics used when:
 -- | 1. The focus element might not be present.
@@ -98,10 +98,10 @@ instance indexMap :: Ord k => Index (M.Map k v) k v where
           (pure m)
           (coalg >>> map \v -> M.insert k v m)
 
-instance indexForeignObject :: Index (FO.Object v) String v where
+instance indexEMap :: Index (EMap.Map k v) k v where
   ix k =
     wander \coalg m ->
-      FO.lookup k m #
+      EMap.lookup k m #
         maybe
           (pure m)
-          (coalg >>> map \v -> FO.insert k v m)
+          (coalg >>> map \v -> EMap.insert k v m)
